@@ -1,0 +1,3 @@
+{
+  "functions": { "api/recommend.js": { "maxDuration": 10, "includeFiles": "model/model.json" } }
+}

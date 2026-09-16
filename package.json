@@ -1,0 +1,9 @@
+{
+  "name": "movie-recommendation-system",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:model": "node scripts/build-model.mjs",
+    "dev": "node server.mjs"
+  }
+}
