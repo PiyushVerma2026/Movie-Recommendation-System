@@ -46,7 +46,7 @@ const creditsByTitle = new Map(credits.map(c => [c.title, c]));
 const records = movies.map(m => {
   const c = creditsByTitle.get(m.title) || {};
   const tagText = [...names(m.genres), ...names(m.keywords), ...names(c.cast, 3), director(c.crew), m.overview || ''].join(' ');
-  return { id: m.movie_id, title: m.title, overview: m.overview || '', tags: tokens(tagText) };
+  return { id: m.movie_id, title: m.title, overview: m.overview || '', director: director(c.crew), cast: names(c.cast, 5), releaseDate: m.release_date || '', tags: tokens(tagText) };
 }).filter(m => m.title && m.tags.length);
 
 const counts = new Map();
@@ -57,7 +57,7 @@ const moviesOut = records.map(r => {
   const termCounts = new Map();
   for (const t of r.tags) if (index.has(t)) termCounts.set(index.get(t), (termCounts.get(index.get(t)) || 0) + 1);
   const norm = Math.sqrt([...termCounts.values()].reduce((s, v) => s + v * v, 0)) || 1;
-  return { id: r.id, title: r.title, overview: r.overview, v: [...termCounts].map(([i, v]) => [i, Number((v / norm).toFixed(5))]) };
+  return { id: r.id, title: r.title, overview: r.overview, director: r.director, cast: r.cast, releaseDate: r.releaseDate, v: [...termCounts].map(([i, v]) => [i, Number((v / norm).toFixed(5))]) };
 });
 const model = { version: 1, vocabulary, movies: moviesOut };
 fs.mkdirSync('model', { recursive: true });
